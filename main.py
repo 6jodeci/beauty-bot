@@ -13,6 +13,6 @@ async def main() -> None:
 
 if __name__ == '__main__':
     asyncio.run(main())
-    # Загружаем настройки логирования из файла конфигурации
     logging.config.fileConfig('logging.conf')
+    # Загружаем настройки логирования из файла конфигурации
     connection.close()
