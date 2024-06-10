@@ -29,7 +29,6 @@ avalible_hall = [
 
 avalible_services = []
 
-
 class RegisterUser(StatesGroup):
     full_name = State()
     email = State()
@@ -155,74 +154,6 @@ async def send_message_service(message: Message, state: FSMContext):
 
     await bot.send_message(message.from_user.id, 'Услуга: ' + service[0][0] + '\nОписание: ' + service[0][1] + '\nЦена: ' + str(service[0][2]) + ' руб.', reply_markup=kb)
     await state.set_state(ChoiseService.service)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @dp.message(lambda message: message.text == "Женский зал")
-# async def send_message_female_hall(message: Message):
-#     await message.answer("Я перешел в женский зал")
-#     cursor = connection.cursor()
-#     cursor.execute("SELECT name, description, service_group_name, price, gender FROM service WHERE gender = 'female' and is_deleted = false and is_active = true")
-#     female_services = cursor.fetchall()
-#     kb_builder = ReplyKeyboardBuilder()
-#     for service_group in female_services:
-#         kb_builder.button(text=service_group[0])
-#     kb_builder.adjust(3)
-#     kb = kb_builder.as_markup(resize_keyboard=True)
-#     await bot.send_message(message.from_user.id, 'Выберите тип услуги', reply_markup=kb)
-
-# @dp.message(lambda message: message.text == "Общий зал")
-# async def send_message_common_hall(message: Message):
-#     await message.answer("Я перешел в общий зал")
-#     cursor = connection.cursor()
-#     cursor.execute("SELECT name, description, service_group_name, price, gender FROM service WHERE gender = 'all' and is_deleted = false and is_active = true")
-#     all_services = cursor.fetchall()
-#     kb_builder = ReplyKeyboardBuilder()
-#     for service_group in all_services:
-#         kb_builder.button(text=service_group[0])
-#     kb_builder.adjust(3)
-#     kb = kb_builder.as_markup(resize_keyboard=True)
-#     await bot.send_message(message.from_user.id, 'Выберите тип услуги', reply_markup=kb)
-
-# @dp.message(lambda message: message.text == "Мужской зал")
-# async def send_message_male_hall(message: Message):
-#     await message.answer("Я перешел в мужский зал")
-#     cursor = connection.cursor()
-#     cursor.execute("SELECT name, description, service_group_name, price, gender FROM service WHERE gender = 'male' and is_deleted = false and is_active = true")
-#     male_services = cursor.fetchall()
-#     kb_builder = ReplyKeyboardBuilder()
-#     for service_group in male_services:
-#         kb_builder.button(text=service_group[0])
-#     kb_builder.adjust(3)
-#     kb = kb_builder.as_markup(resize_keyboard=True)
-#     await bot.send_message(message.from_user.id, 'Выберите тип услуги', reply_markup=kb)
 
 @dp.message(lambda message: message.text == "/buy")
 async def buy_process(message: Message):

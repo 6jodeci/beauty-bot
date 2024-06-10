@@ -6,4 +6,4 @@ COPY . /usr/src/app/
 # install dependencies
 RUN pip install --user telebot
 # run app
-CMD ["python", "cmd/main.py"]
+CMD ["python", "main.py"]
