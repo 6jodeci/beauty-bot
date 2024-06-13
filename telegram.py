@@ -13,6 +13,7 @@ from user_keyboard import *
 from admin_keyboard import *
 from const import *
 import random
+import asyncio
 import string
 from datetime import datetime, timedelta
 
@@ -147,7 +148,7 @@ async def register_phone_number(message: types.Message, state: FSMContext):
     try:
         cursor.execute("INSERT INTO user (id, email, full_name, phone_number) VALUES (%s, %s, %s, %s)", (message.from_user.id, data['email'], data['full_name'], data['phone_number']))
         connection.commit()
-        await message.answer(registration_success)
+        await message.answer(registration_success, reply_markup=start_kb)
     except Exception as e:
         connection.rollback()
         await message.answer(registration_error)
@@ -168,11 +169,16 @@ async def send_message_support(message: Message, state: FSMContext):
     kb_builder = ReplyKeyboardBuilder()
     kb_builder.button(text=main_menu_button)
     kb = kb_builder.as_markup(resize_keyboard=True)
+
     await message.answer(help_message, reply_markup=kb)
     await state.set_state(Support.help_message)
     
 @dp.message(Support.help_message)
 async def send_help_message(message: Message, state: FSMContext):
+    if message.text == main_menu_button:
+        await bot.send_message(message.chat.id, main_menu_message, reply_markup=start_kb)
+        await state.clear()
+        return
     cursor = connection.cursor()
     cursor.execute(f"SELECT id FROM user WHERE is_admin = true ORDER BY RAND() LIMIT 1")
     admin_id = cursor.fetchone()[0]
@@ -318,6 +324,7 @@ async def send_message_time(message: Message, state: FSMContext):
 async def confirm_booking(message: Message, state: FSMContext):
     if message.text not in create_time_list():
         await bot.send_message(message.from_user.id, 'Некорректное время. Пожалуйста, выберите время из предложенного списка.')
+        state.clear()
         return
 
     data = await state.get_data()
@@ -331,12 +338,17 @@ async def confirm_booking(message: Message, state: FSMContext):
     admin_id = cursor.fetchone()[0]
 
     username = "@" + message.from_user.username
-    await bot.send_message(admin_id, f'Пользователь {username} записался на {selected_date} в {selected_time}.\n Услуга {service_name}.')
+    await bot.send_message(admin_id, f'Пользователь {username} записался на {selected_date} в {selected_time}.\nУслуга {service_name}.')
 
-    await bot.send_message(message.from_user.id, f'Вы выбрали запись на {selected_date} в {selected_time}.\n Услуга {service_name}.', reply_markup=start_kb)
+    await bot.send_message(message.from_user.id, f'Вы выбрали запись на {selected_date} в {selected_time}.\nУслуга {service_name}.', reply_markup=start_kb)
     
     cursor.execute(f"INSERT INTO booking (username, service_name, time) VALUES (%s, %s, %s)", (username, service_name, selected_datetime))
     connection.commit()
+
+    reminder_time = selected_datetime - timedelta(hours=1)
+    if reminder_time > datetime.now():
+        await asyncio.sleep((reminder_time - datetime.now()).total_seconds())
+        await bot.send_message(message.from_user.id, f'Напоминаем, что у вас сегодня запись на {selected_time}.\nУслуга {service_name}.')
 
     await state.clear()
 
@@ -660,7 +672,7 @@ async def create_item_active(message: Message, state: FSMContext):
         print(e)
     connection.commit()
     await message.answer(f"Товар '{item_data['name']}' был создан.")
-    state.clear()
+    await state.clear()
 
 @dp.message(lambda message: message.text == create_service_button)
 async def create_service(message: Message, state: FSMContext):

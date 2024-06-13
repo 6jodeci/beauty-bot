@@ -6,8 +6,6 @@ from dispatcher import *
 
 
 async def main() -> None:
-    # Initialize Bot instance with default bot properties which will be passed to all API calls
-    # And the run events dispatching
     await dp.start_polling(bot)
 
 

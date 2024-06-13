@@ -25,6 +25,3 @@ kb = [
 
 hall_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
-kb = [
-    []
-]
