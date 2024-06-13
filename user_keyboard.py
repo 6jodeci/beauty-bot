@@ -1,32 +1,30 @@
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import (
+    ReplyKeyboardMarkup,
+    KeyboardButton,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+)
+
+from const import *
 
 kb = [
-        [KeyboardButton(text='Товары'),
-        KeyboardButton(text='Услуги')],
-        [KeyboardButton(text='Где мы находимся?'),
-        KeyboardButton(text='Поддержка')],
+    [KeyboardButton(text=items_button), KeyboardButton(text=service_button)],
+    [KeyboardButton(text=location_button), KeyboardButton(text=support_button)],
 ]
 
 start_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
 kb = [
-        [KeyboardButton(text="Женский зал"),
-        KeyboardButton(text="Общий зал"),
-        KeyboardButton(text="Мужской зал")],
-        [KeyboardButton(text="На главную")]
+    [
+        KeyboardButton(text=female_hall_button),
+        KeyboardButton(text=all_hall_button),
+        KeyboardButton(text=men_hall_button),
+    ],
+    [KeyboardButton(text=main_menu_button)],
 ]
 
 hall_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
 
 kb = [
-        [KeyboardButton(text='Создать группу услуг'),
-        KeyboardButton(text='Создать группу товаров'),]
-        [KeyboardButton(text='Создать услугу'),
-        KeyboardButton(text='Создать товар')]
-        [KeyboardButton(text='Товары'),
-        KeyboardButton(text='Услуги')],
-        [KeyboardButton(text='Где мы находимся?'),
-        KeyboardButton(text='Поддержка')],
+    []
 ]
-
-admin_kb = ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)

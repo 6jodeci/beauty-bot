@@ -8,4 +8,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 dp = Dispatcher()
-bot = Bot(token=os.getenv("TELEGRAM_BOT_TOKEN"), default=DefaultBotProperties(parse_mode=ParseMode.HTML))
+bot = Bot(
+    token=os.getenv("TELEGRAM_BOT_TOKEN"),
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML),
+)
