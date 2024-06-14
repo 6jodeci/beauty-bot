@@ -324,7 +324,7 @@ async def send_message_time(message: Message, state: FSMContext):
 async def confirm_booking(message: Message, state: FSMContext):
     if message.text not in create_time_list():
         await bot.send_message(message.from_user.id, 'Некорректное время. Пожалуйста, выберите время из предложенного списка.')
-        state.clear()
+        await state.clear()
         return
 
     data = await state.get_data()
@@ -507,6 +507,7 @@ async def successful_payment(message: Message, state: FSMContext):
         f"Сумма: {message.successful_payment.total_amount / 100} {message.successful_payment.currency}\n"
         f"Номер заказа: {order_number}\n"
     )
+
 @dp.message(lambda message: message.text == main_menu_button)
 async def send_message_back(message: Message):
     cursor = connection.cursor()
